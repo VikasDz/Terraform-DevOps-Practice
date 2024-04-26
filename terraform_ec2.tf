@@ -1,17 +1,21 @@
-resource "local_file" "devops" {
-  filename = "/home/practicevm1/Day1/terraform-variables/devopstest.txt"
-  content  = var.content_map["content1"]
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
 }
 
-resource "local_file" "devops-var" {
-  filename = var.filename
-  content  = var.content_map["content2"]
+provider "aws" {
+  region = "us-east-1"
 }
 
-output "devops_op_trainer" {
-  value = var.devops_op_trainer
-}
-
-output "aws_ec2_instance" {
-  value = var.aws_ec2_object
+resource "aws_instance" "aws_ec2_test" {
+        count = 1
+        ami = "ami-053b0d53c279acc90"
+        instance_type = "t2.micro"
+        tags = {
+               Name = "Terraform-${count}-Test"
+  }
 }
